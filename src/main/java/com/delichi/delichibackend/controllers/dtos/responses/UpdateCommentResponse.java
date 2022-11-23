@@ -1,0 +1,15 @@
+package com.delichi.delichibackend.controllers.dtos.responses;
+
+import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
+
+@Setter @Getter @Builder
+public class UpdateCommentResponse {
+    private Long id;
+    private String date;
+    private Integer score;
+    private String content;
+    private UserResponse user;
+    private RestaurantResponse restaurant;
+}
