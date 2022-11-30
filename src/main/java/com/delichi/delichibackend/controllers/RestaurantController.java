@@ -22,6 +22,7 @@ public class RestaurantController {
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
     }
 
+
     @GetMapping("restaurants")
     public ResponseEntity<BaseResponse> list(){
         BaseResponse baseResponse = service.list();
@@ -42,7 +43,7 @@ public class RestaurantController {
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
     }
 
-    @PutMapping("{id}/zone/{zoneId}")
+    @PostMapping("{id}/zone/{zoneId}")
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody UpdateRestaurantRequest request,
                                                @Valid @PathVariable Long id,
                                                @Valid @PathVariable Long zoneId){

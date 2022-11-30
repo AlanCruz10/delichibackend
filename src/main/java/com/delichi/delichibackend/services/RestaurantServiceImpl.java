@@ -109,7 +109,7 @@ public class RestaurantServiceImpl implements IRestaurantService {
                 .ceo(ceoService.fromCeoToCeoResponse(restaurant.getCeo()))
                 .kitchen(restaurant.getKitchen())
                 .comments(getCommentResponseList(restaurant.getId()))
-                .reservations(getReservationResponseList(restaurant.getId()))
+                .reservations(  getReservationResponseList(restaurant.getId()))
                 .images(getImageResponsesList(restaurant.getId()))
                 .build();
     }
@@ -169,6 +169,8 @@ public class RestaurantServiceImpl implements IRestaurantService {
                 .id(reservation.getId())
                 .date(reservation.getDate())
                 .people(reservation.getPeople())
+                .hour(reservation.getHour())
+                .status(reservation.getStatus())
                 .user(userService.fromUserToUserResponse(reservation.getUser()))
                 .restaurant(fromRestaurantToRestaurantResponse(reservation.getRestaurant())).build();
     }

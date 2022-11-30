@@ -24,7 +24,7 @@ public class UserController {
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
     }
 
-    @GetMapping("{userId}/reservations")
+    @GetMapping("reservations/{userId}")
     public ResponseEntity<BaseResponse> ListReservationsByUserId(@Valid @PathVariable Long userId){
         BaseResponse baseResponse = service.ListReservationsByUserId(userId);
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());

@@ -1,5 +1,6 @@
 package com.delichi.delichibackend;
 
+import org.apache.http.HttpHeaders;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +18,8 @@ public class DelichibackendApplication implements WebMvcConfigurer{
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**");
+        registry.addMapping("/**")
+                .exposedHeaders(HttpHeaders.AUTHORIZATION);
+
     }
 }

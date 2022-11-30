@@ -30,7 +30,7 @@ public class ReservationController {
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
     }
 
-    @PutMapping("{id}")
+    @PostMapping("{id}" )
     public ResponseEntity<BaseResponse> update(@Valid @RequestBody UpdateReservationRequest request,
                                                @Valid @PathVariable Long id){
         BaseResponse baseResponse = service.update(request, id);

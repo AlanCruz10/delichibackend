@@ -65,7 +65,7 @@ public class UserServiceImpl implements IUserService {
     public BaseResponse delete(Long id) {
         repository.delete(findAndEnsureExists(id));
         return BaseResponse.builder()
-                .message("User Deleted Correctly")
+                .message("User Deleted")
                 .success(Boolean.TRUE)
                 .httpStatus(HttpStatus.OK).build();
     }
@@ -100,6 +100,8 @@ public class UserServiceImpl implements IUserService {
     private GetReservationResponse from(Reservation reservation){
         return GetReservationResponse.builder()
                 .date(reservation.getDate())
+                .hour(reservation.getHour())
+                .status(reservation.getStatus())
                 .people(reservation.getPeople())
                 .id(reservation.getId())
                 .user(fromUserToUserResponse(reservation.getUser()))
