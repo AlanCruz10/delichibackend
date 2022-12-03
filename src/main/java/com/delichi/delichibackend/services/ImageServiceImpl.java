@@ -109,13 +109,19 @@ public class ImageServiceImpl implements IImageService {
     public BaseResponse uploadRestaurantImages(MultipartFile multipartFile, Long ceoId, Long restaurantId) {
         String images = "images";
         String urlDirectionImage = "/images/restaurantImages/";
-        return uploadImage(multipartFile, ceoId, restaurantId, images, urlDirectionImage);
+        if (Objects.equals(images, "images")){
+            return uploadImage(multipartFile, ceoId, restaurantId, images, urlDirectionImage);
+        }
+        throw new ExistingDataConflictException();
     }
 
     @Override
     public BaseResponse uploadRestaurantLogoImage(MultipartFile multipartFile, Long ceoId, Long restaurantId) {
         String images = "logo";
         String urlDirectionImage = "/images/logo/";
+        if(ValidateNumberOfLogos(restaurantId)){
+            throw new ExistingDataConflictException();
+        }
         return uploadImage(multipartFile, ceoId, restaurantId, images, urlDirectionImage);
     }
 
@@ -123,6 +129,9 @@ public class ImageServiceImpl implements IImageService {
     public BaseResponse uploadRestaurantBannerImage(MultipartFile multipartFile, Long ceoId, Long restaurantId) {
         String images = "banner";
         String urlDirectionImage = "/images/banner/";
+        if(ValidateNumberOfBanners(restaurantId)){
+            throw new ExistingDataConflictException();
+        }
         return uploadImage(multipartFile, ceoId, restaurantId, images, urlDirectionImage);
     }
 
@@ -169,29 +178,25 @@ public class ImageServiceImpl implements IImageService {
 
     private BaseResponse uploadImage(MultipartFile multipartFile, Long ceoId, Long restaurantId,String images, String urlDirectionImage){
         String urlDirection;
-        if (!ValidateNumberOfLogos(restaurantId) || !ValidateNumberOfBanners(restaurantId) || Objects.equals(images, "images")){
-            if(ValidateFileExtension(multipartFile)){
-                try {
-                    urlDirection = "data/businessInformation/ceo/" + ceoService.findAndEnsureExist(ceoId).getEmail()
-                            + "/properties/ceoRestaurants/" + replaceRestaurantName(restaurantService.findAndEnsureExist(restaurantId))
-                            + urlDirectionImage;
-                    uploadFileToS3Bucket(filePath(urlDirection, multipartFile), convertMultiPartToFile(multipartFile));
-                    repository.save(createImageNew(fileURL(urlDirection,multipartFile), restaurantId, multipartFile, ceoId, images));
-                    convertMultiPartToFile(multipartFile).delete();
-                    return BaseResponse.builder()
-                            .data(fileURL(urlDirection,multipartFile))
-                            .message("Image Uploaded Correctly")
-                            .success(Boolean.TRUE)
-                            .httpStatus(HttpStatus.OK)
-                            .build();
-                } catch (IOException e) {
-                    throw new InternalServerError();
-                }
-            }else {
-                throw new NotValidException();
+        if(ValidateFileExtension(multipartFile)){
+            try {
+                urlDirection = "data/businessInformation/ceo/" + ceoService.findAndEnsureExist(ceoId).getEmail()
+                        + "/properties/ceoRestaurants/" + replaceRestaurantName(restaurantService.findAndEnsureExist(restaurantId))
+                        + urlDirectionImage;
+                uploadFileToS3Bucket(filePath(urlDirection, multipartFile), convertMultiPartToFile(multipartFile));
+                repository.save(createImageNew(fileURL(urlDirection,multipartFile), restaurantId, multipartFile, ceoId, images));
+                convertMultiPartToFile(multipartFile).delete();
+                return BaseResponse.builder()
+                        .data(fileURL(urlDirection,multipartFile))
+                        .message("Image Uploaded Correctly")
+                        .success(Boolean.TRUE)
+                        .httpStatus(HttpStatus.OK)
+                        .build();
+            } catch (IOException e) {
+                throw new InternalServerError();
             }
         }else {
-            throw new ExistingDataConflictException();
+            throw new NotValidException();
         }
     }
 
