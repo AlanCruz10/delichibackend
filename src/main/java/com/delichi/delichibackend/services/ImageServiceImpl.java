@@ -282,6 +282,10 @@ public class ImageServiceImpl implements IImageService {
     private Image findAndCreateImageNew(String fileUrl, Long restaurantId, MultipartFile multipartFile, Long ceoId, String images){
         Image newImage = repository.GetLogoImageByRestaurantId(restaurantId)
                 .orElseThrow(NotFoundException::new);
+        if(images.equals("banner")){
+            newImage = repository.GetBannerImageByRestaurantId(restaurantId)
+                    .orElseThrow(NotFoundException::new);
+        }
         newImage.setFileUrl(fileUrl);
         newImage.setRestaurant(restaurantService.findAndEnsureExist(restaurantId));
         newImage.setName(generateFileName(multipartFile));
