@@ -23,6 +23,12 @@ public class CommentController {
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
     }
 
+    @GetMapping("/restaurant/{restaurantId}/comments")
+    public ResponseEntity<BaseResponse> listAllCommentsByRestaurantId(@Valid @PathVariable Long restaurantId){
+        BaseResponse baseResponse = service.listAlCommentsByRestaurantId(restaurantId);
+        return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
+    }
+
     @PostMapping("user/{userId}/restaurant/{restaurantId}")
     public ResponseEntity<BaseResponse> create(@Valid @RequestBody CreateCommentRequest request,
                                                @Valid @PathVariable Long userId,

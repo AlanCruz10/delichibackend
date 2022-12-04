@@ -9,6 +9,8 @@ import com.delichi.delichibackend.entities.Comment;
 public interface ICommentService {
     BaseResponse get(Long id);
 
+    BaseResponse listAlCommentsByRestaurantId(Long id);
+
     BaseResponse create(CreateCommentRequest request, Long userId, Long restaurantId);
 
     BaseResponse update(UpdateCommentRequest request, Long id);

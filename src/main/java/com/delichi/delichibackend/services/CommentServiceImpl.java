@@ -13,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class CommentServiceImpl implements ICommentService {
@@ -34,6 +36,16 @@ public class CommentServiceImpl implements ICommentService {
                 .message("comment by id")
                 .success(Boolean.TRUE)
                 .httpStatus(HttpStatus.OK).build();
+    }
+
+    @Override
+    public BaseResponse listAlCommentsByRestaurantId(Long id) {
+        return BaseResponse.builder()
+                .data(getCommentResponseList(id))
+                .message("List al comments By Restaurant")
+                .success(Boolean.TRUE)
+                .httpStatus(HttpStatus.OK)
+                .build();
     }
 
     @Override
@@ -65,8 +77,19 @@ public class CommentServiceImpl implements ICommentService {
                 .build();
     }
 
-    private Comment findAndEnsureExist(Long id){
+    private Comment findAndEnsureExist(Long id) {
         return repository.findById(id).orElseThrow(NotFoundException::new);
+    }
+
+    private List<GetCommentResponse> getCommentResponseList(Long restaurantId){
+        return commentsByRestaurantId(restaurantId)
+                .stream()
+                .map(this::from_get)
+                .collect(Collectors.toList());
+    }
+
+    private List<Comment> commentsByRestaurantId(Long restaurantId){
+        return restaurantService.findAndEnsureExist(restaurantId).getComments();
     }
 
     private GetCommentResponse fromCommentToGetCommentResponse(Comment comment){
@@ -91,6 +114,16 @@ public class CommentServiceImpl implements ICommentService {
 
     private CreateCommentResponse from(Comment comment){
         return CreateCommentResponse.builder()
+                .id(comment.getId())
+                .user(userService.fromUserToUserResponse(comment.getUser()))
+                .date(comment.getDate())
+                .content(comment.getContent())
+                .score(comment.getScore())
+                .restaurant(restaurantService.fromRestaurantToRestaurantResponse(comment.getRestaurant())).build();
+    }
+
+    private GetCommentResponse from_get(Comment comment){
+        return GetCommentResponse.builder()
                 .id(comment.getId())
                 .user(userService.fromUserToUserResponse(comment.getUser()))
                 .date(comment.getDate())
