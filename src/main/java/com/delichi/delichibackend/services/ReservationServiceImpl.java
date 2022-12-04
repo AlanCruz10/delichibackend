@@ -88,11 +88,33 @@ public class ReservationServiceImpl implements IReservationService {
         int yearToYear = LocalDate.now().getYear();
         int dayToDay = LocalDate.now().getDayOfMonth();
         String date = yearToYear+"-"+monthToMonth+"-"+dayToDay;
-        DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
-        String format = datetime.format(dateFormatToDate2);
-        return LocalDate.parse(format,dateFormatToDate2);
+
+        if(dayToDay<10){
+            DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-MM-d");
+            DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-MM-d");
+            LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
+            String format = datetime.format(dateFormatToDate2);
+            return LocalDate.parse(format,dateFormatToDate2);
+        } else if (monthToMonth<10) {
+            DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-M-dd");
+            DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-M-dd");
+            LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
+            String format = datetime.format(dateFormatToDate2);
+            return LocalDate.parse(format,dateFormatToDate2);
+
+        } else if (monthToMonth>10 && dayToDay>10) {
+            DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
+            String format = datetime.format(dateFormatToDate2);
+            return LocalDate.parse(format,dateFormatToDate2);
+        }else {
+            DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-M-d");
+            DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-M-d");
+            LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
+            String format = datetime.format(dateFormatToDate2);
+            return LocalDate.parse(format,dateFormatToDate2);
+        }
     }
 
     private LocalDate dateOfReservation(CreateReservationRequest request){
@@ -100,11 +122,32 @@ public class ReservationServiceImpl implements IReservationService {
         int mont = Integer.parseInt(request.getDate().substring(5, 7));
         int day = Integer.parseInt(request.getDate().substring(8, 10));
         String date = year+"-"+mont+"-"+day;
-        DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
-        String format = datetime.format(dateFormatToDate2);
-        return LocalDate.parse(format, dateFormatToDate2);
+        if(day<10){
+            DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-MM-d");
+            DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-MM-d");
+            LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
+            String format = datetime.format(dateFormatToDate2);
+            return LocalDate.parse(format, dateFormatToDate2);
+        } else if (mont<10) {
+            DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-M-dd");
+            DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-M-dd");
+            LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
+            String format = datetime.format(dateFormatToDate2);
+            return LocalDate.parse(format, dateFormatToDate2);
+
+        } else if (mont>10 && day>10) {
+            DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
+            String format = datetime.format(dateFormatToDate2);
+            return LocalDate.parse(format, dateFormatToDate2);
+        }else {
+            DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-M-d");
+            DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-M-d");
+            LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
+            String format = datetime.format(dateFormatToDate2);
+            return LocalDate.parse(format, dateFormatToDate2);
+        }
     }
 
     private LocalTime getLocalHour(){
@@ -144,13 +187,40 @@ public class ReservationServiceImpl implements IReservationService {
         int mont = Integer.parseInt(request.getDate().substring(5, 7));
         int day = Integer.parseInt(request.getDate().substring(8, 10));
         String date = year+"-"+mont+"-"+day;
-        DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
-        String format = datetime.format(dateFormatToDate2);
-        LocalDate parse = LocalDate.parse(format, dateFormatToDate2);
-        String dateString = DateTimeFormatter.RFC_1123_DATE_TIME.format(parse.atStartOfDay(ZoneId.systemDefault()));
-        return dateString.substring(0, 3);
+        if(day<10){
+            DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-MM-d");
+            DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-MM-d");
+            LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
+            String format = datetime.format(dateFormatToDate2);
+            LocalDate parse = LocalDate.parse(format, dateFormatToDate2);
+            String dateString = DateTimeFormatter.RFC_1123_DATE_TIME.format(parse.atStartOfDay(ZoneId.systemDefault()));
+            return dateString.substring(0, 3);
+        } else if (mont<10) {
+            DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-M-dd");
+            DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-M-dd");
+            LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
+            String format = datetime.format(dateFormatToDate2);
+            LocalDate parse = LocalDate.parse(format, dateFormatToDate2);
+            String dateString = DateTimeFormatter.RFC_1123_DATE_TIME.format(parse.atStartOfDay(ZoneId.systemDefault()));
+            return dateString.substring(0, 3);
+
+        } else if (mont>10 && day>10) {
+            DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
+            String format = datetime.format(dateFormatToDate2);
+            LocalDate parse = LocalDate.parse(format, dateFormatToDate2);
+            String dateString = DateTimeFormatter.RFC_1123_DATE_TIME.format(parse.atStartOfDay(ZoneId.systemDefault()));
+            return dateString.substring(0, 3);
+        }else {
+            DateTimeFormatter dateFormatToDate = DateTimeFormatter.ofPattern("yyyy-M-d");
+            DateTimeFormatter dateFormatToDate2 = DateTimeFormatter.ofPattern("yyyy-M-d");
+            LocalDate datetime = LocalDate.parse(date, dateFormatToDate);
+            String format = datetime.format(dateFormatToDate2);
+            LocalDate parse = LocalDate.parse(format, dateFormatToDate2);
+            String dateString = DateTimeFormatter.RFC_1123_DATE_TIME.format(parse.atStartOfDay(ZoneId.systemDefault()));
+            return dateString.substring(0, 3);
+        }
     }
 
     private Reservation validCreateReservation(CreateReservationRequest request, Long userId, Long restaurantId){
