@@ -13,5 +13,5 @@ public class GetUserResponse {
     private String name;
     private String lastName;
     private Long phoneNumber;
-    private String password;
+    private String token;
 }

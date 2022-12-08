@@ -1,6 +1,7 @@
 package com.delichi.delichibackend.controllers;
 
 import com.delichi.delichibackend.controllers.dtos.request.CreateUserRequest;
+import com.delichi.delichibackend.controllers.dtos.request.LoginRequest;
 import com.delichi.delichibackend.controllers.dtos.request.UpdateUserRequest;
 import com.delichi.delichibackend.controllers.dtos.responses.BaseResponse;
 import com.delichi.delichibackend.services.interfaces.IUserService;
@@ -17,6 +18,12 @@ public class UserController {
 
     @Autowired
     private IUserService service;
+
+    @PostMapping("login")
+    public ResponseEntity<BaseResponse> login(@Valid @RequestBody LoginRequest request){
+        BaseResponse baseResponse = service.login(request);
+        return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
+    }
 
     @GetMapping("{email}")
     public ResponseEntity<BaseResponse> get(@Valid @Email @PathVariable String email){

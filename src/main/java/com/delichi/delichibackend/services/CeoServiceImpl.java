@@ -1,6 +1,7 @@
 package com.delichi.delichibackend.services;
 
 import com.delichi.delichibackend.controllers.dtos.request.CreateCeoRequest;
+import com.delichi.delichibackend.controllers.dtos.request.LoginRequest;
 import com.delichi.delichibackend.controllers.dtos.request.UpdateCeoRequest;
 import com.delichi.delichibackend.controllers.dtos.responses.*;
 import com.delichi.delichibackend.entities.Ceo;
@@ -8,10 +9,13 @@ import com.delichi.delichibackend.entities.Image;
 import com.delichi.delichibackend.entities.Restaurant;
 import com.delichi.delichibackend.entities.exceptions.ExistingDataConflictException;
 import com.delichi.delichibackend.entities.exceptions.NotFoundException;
+import com.delichi.delichibackend.entities.exceptions.NotValidException;
 import com.delichi.delichibackend.repositories.ICeoRepository;
+import com.delichi.delichibackend.security.TokenUtils;
 import com.delichi.delichibackend.services.interfaces.ICeoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,9 +28,26 @@ public class CeoServiceImpl implements ICeoService {
     private ICeoRepository repository;
 
     @Override
+    public BaseResponse login(LoginRequest request) {
+        Ceo ceo = findCeoByEmail(request.getEmail());
+        boolean login = new BCryptPasswordEncoder().matches(request.getPassword(), ceo.getPassword());
+        if(login){
+            String token = TokenUtils.createToken(ceo.getName(), ceo.getEmail());
+            return BaseResponse.builder()
+                    .data(fromCeoToGetCeoResponse(ceo,token))
+                    .message("Ceo Obtained")
+                    .success(Boolean.TRUE)
+                    .httpStatus(HttpStatus.OK)
+                    .build();
+        }else {
+            throw new NotValidException();
+        }
+    }
+
+    @Override
     public BaseResponse get(String email) {
         return BaseResponse.builder()
-                .data(fromCeoToGetCeoResponse(findCeoByEmail(email)))
+                .data(fromCeoToCeoResponse(findCeoByEmail(email)))
                 .message("Ceo Obtained")
                 .success(Boolean.TRUE)
                 .httpStatus(HttpStatus.OK)
@@ -75,21 +96,30 @@ public class CeoServiceImpl implements ICeoService {
         return repository.findById(id).orElseThrow(NotFoundException::new);
     }
 
-    private Ceo findCeoByEmail(String email) {
+    @Override
+    public Ceo findCeoByEmail(String email) {
         return repository.findCeoByEmail(email).orElseThrow(NotFoundException::new);
     }
 
-    private GetCeoResponse fromCeoToGetCeoResponse(Ceo ceo) {
+    @Override
+    public GetCeoResponse fromCeoToGetCeoResponse(Ceo ceo, String token) {
         return GetCeoResponse.builder()
                 .id(ceo.getId())
                 .name(ceo.getName())
                 .firstSurname(ceo.getFirstSurname())
                 .secondSurname(ceo.getSecondSurname())
                 .email(ceo.getEmail())
-                .password(ceo.getPassword()).build();
+                .token("Bearer " + token).build();
     }
 
     private CreateCeoRequest validateEmailAndPhoneNumberExists(CreateCeoRequest request){
+        if (repository.findByEmailOrPhoneNumber(request.getEmail(), request.getPhoneNumber()).isPresent()){
+            throw new ExistingDataConflictException();
+        }
+        return request;
+    }
+
+    private UpdateCeoRequest validateEmailAndPhoneNumberExists(UpdateCeoRequest request){
         if (repository.findByEmailOrPhoneNumber(request.getEmail(), request.getPhoneNumber()).isPresent()){
             throw new ExistingDataConflictException();
         }
@@ -123,7 +153,7 @@ public class CeoServiceImpl implements ICeoService {
         ceo.setSecondSurname(request.getSecondSurname());
         ceo.setPhoneNumber(request.getPhoneNumber());
         ceo.setEmail(request.getEmail());
-        ceo.setPassword(request.getPassword());
+        ceo.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
         return ceo;
     }
 
@@ -138,35 +168,36 @@ public class CeoServiceImpl implements ICeoService {
 
     private Ceo validationUpdateDateCeo(UpdateCeoRequest request, Long id){
         Ceo ceo = findAndEnsureExist(id);
+        UpdateCeoRequest requestValidate = validateEmailAndPhoneNumberExists(request);
         if(request.getName().length() == 0 || request.getName() == null || Objects.equals(request.getName(), "")) {
             ceo.setName(ceo.getName());
         }else {
-            ceo.setName(request.getName());
+            ceo.setName(requestValidate.getName());
         }
         if(request.getPhoneNumber() == null || request.getPhoneNumber() == 0) {
             ceo.setPhoneNumber(ceo.getPhoneNumber());
         }else {
-            ceo.setPhoneNumber(request.getPhoneNumber());
+            ceo.setPhoneNumber(requestValidate.getPhoneNumber());
         }
         if(request.getEmail().length() == 0 || request.getEmail() == null || Objects.equals(request.getEmail(), "")) {
             ceo.setEmail(ceo.getEmail());
         }else {
-            ceo.setEmail(request.getEmail());
+            ceo.setEmail(requestValidate.getEmail());
         }
         if(request.getPassword().length() == 0 || request.getPassword() == null || Objects.equals(request.getPassword(), "")) {
             ceo.setPassword(ceo.getPassword());
         }else {
-            ceo.setPassword(request.getPassword());
+            ceo.setPassword(requestValidate.getPassword());
         }
         if(request.getFirstSurname().length() == 0 || request.getFirstSurname() == null || Objects.equals(request.getFirstSurname(), "")) {
             ceo.setFirstSurname(ceo.getFirstSurname());
         }else {
-            ceo.setFirstSurname(request.getFirstSurname());
+            ceo.setFirstSurname(requestValidate.getFirstSurname());
         }
         if(request.getSecondSurname().length() == 0 || request.getSecondSurname() == null || Objects.equals(request.getSecondSurname(), "")) {
             ceo.setSecondSurname(ceo.getSecondSurname());
         }else {
-            ceo.setSecondSurname(request.getSecondSurname());
+            ceo.setSecondSurname(requestValidate.getSecondSurname());
         }
         return ceo;
     }

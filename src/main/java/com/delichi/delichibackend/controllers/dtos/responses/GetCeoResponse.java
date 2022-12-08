@@ -11,5 +11,5 @@ public class GetCeoResponse {
     private String firstSurname;
     private String secondSurname;
     private String email;
-    private String password;
+    private String token;
 }

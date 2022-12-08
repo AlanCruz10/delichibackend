@@ -19,7 +19,9 @@ public class DelichibackendApplication implements WebMvcConfigurer{
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .exposedHeaders(HttpHeaders.AUTHORIZATION);
+                .exposedHeaders(HttpHeaders.AUTHORIZATION)
+                .allowedMethods("*")
+                .allowedOrigins("*");
 
     }
 }

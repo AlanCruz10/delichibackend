@@ -13,5 +13,7 @@ public class RestaurantResponse {
     private Long id;
     private String name;
     private String nameZone;
+    private Integer topScore;
+
     private List<GetImageResponse> image;
 }

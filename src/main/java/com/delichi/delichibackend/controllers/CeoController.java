@@ -1,6 +1,7 @@
 package com.delichi.delichibackend.controllers;
 
 import com.delichi.delichibackend.controllers.dtos.request.CreateCeoRequest;
+import com.delichi.delichibackend.controllers.dtos.request.LoginRequest;
 import com.delichi.delichibackend.controllers.dtos.request.UpdateCeoRequest;
 import com.delichi.delichibackend.controllers.dtos.responses.BaseResponse;
 import com.delichi.delichibackend.services.interfaces.ICeoService;
@@ -11,10 +12,17 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("ceo")
 public class CeoController {
     @Autowired
     private ICeoService service;
+
+    @PostMapping("login")
+    public ResponseEntity<BaseResponse> login(@Valid @RequestBody LoginRequest request){
+        BaseResponse baseResponse = service.login(request);
+        return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
+    }
 
     @GetMapping("{email}")
     public ResponseEntity<BaseResponse> get(@Valid @PathVariable String email){
@@ -22,7 +30,7 @@ public class CeoController {
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
     }
 
-    @GetMapping("{id}/restaurants")
+    @GetMapping("{id}/restaurants/u")
     public ResponseEntity<BaseResponse> listAllRestaurantByCeoId(@Valid @PathVariable Long id){
         BaseResponse baseResponse = service.listAllRestaurantByCeoId(id);
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
