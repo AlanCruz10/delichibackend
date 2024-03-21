@@ -93,11 +93,11 @@ public class ZoneServiceImpl implements IZoneService {
                 .name(restaurant.getName())
                 .id(restaurant.getId())
                 .topScore(moda(integers))
-                .image(getImageResponseList(restaurant))
+//                .image(getImageResponseList(restaurant))
                 .build();
     }
 
-    private Integer moda(List<Integer> score){
+    private Float moda(List<Integer> score){
         HashMap<Integer, Integer> mapa = new HashMap<>();
         for (int x = 0; x < score.size(); x++) {
             Integer numero = score.get(x);
@@ -107,7 +107,8 @@ public class ZoneServiceImpl implements IZoneService {
                 mapa.put(numero, 1);
             }
         }
-        int moda =0, mayor = 0;
+        float moda =0;
+        int mayor = 0;
         for (HashMap.Entry<Integer, Integer> entry : mapa.entrySet()) {
             if (entry.getValue() > mayor) {
                 mayor = entry.getValue();

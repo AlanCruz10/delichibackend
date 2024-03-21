@@ -18,11 +18,13 @@ public class GetRestaurantResponse {
     private String schedule;
     private String menu;
     private String kitchen;
-    private Integer tableNumber;
-    private Integer tableCapacity;
+    private Float topScore;
+    private Integer reviews;
+//    private Integer tableNumber;
+//    private Integer tableCapacity;
     private GetZoneResponse zone;
     private CeoResponse ceo;
     private List<GetCommentResponse> comments;
-    private List<GetReservationResponse> reservations;
-    private List<GetImageResponse> images;
+//    private List<GetReservationResponse> reservations;
+//    private List<GetImageResponse> images;
 }

@@ -23,8 +23,8 @@ public class WebSecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
 
-        final String[] ROTES_NON_PROTECTED = {"/restaurant/restaurants",
-                                                    "/restaurant/{id}",
+        final String[] ROTES_NON_PROTECTED = {"/restaurant/api/v1/restaurants",
+                                                    "/restaurant/api/v1/{id}",
                                                     "/restaurant/restaurants/name/{name}",
                                                     "/ceo",
                                                     "/ceo/login",

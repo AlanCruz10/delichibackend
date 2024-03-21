@@ -103,14 +103,16 @@ public class RestaurantServiceImpl implements IRestaurantService {
                 .address(restaurant.getAddress())
                 .schedule(restaurant.getSchedule())
                 .menu(restaurant.getMenu())
-                .tableNumber(restaurant.getTableNumber())
-                .tableCapacity(restaurant.getTableCapacity())
+                .topScore(restaurant.getTopScore())
+                .reviews(restaurant.getReviews())
+//                .tableNumber(restaurant.getTableNumber())
+//                .tableCapacity(restaurant.getTableCapacity())
                 .zone(zoneService.from(restaurant.getZone()))
                 .ceo(ceoService.fromCeoToCeoResponse(restaurant.getCeo()))
                 .kitchen(restaurant.getKitchen())
                 .comments(getCommentResponseList(restaurant.getId()))
-                .reservations(  getReservationResponseList(restaurant.getId()))
-                .images(getImageResponsesList(restaurant.getId()))
+//                .reservations(  getReservationResponseList(restaurant.getId()))
+//                .images(getImageResponsesList(restaurant.getId()))
                 .build();
     }
 
@@ -196,7 +198,12 @@ public class RestaurantServiceImpl implements IRestaurantService {
         return RestaurantResponse.builder()
                 .id(restaurant.getId())
                 .name(restaurant.getName())
-                .image(getImageResponsesList(restaurant.getId())).build();
+                .topScore(restaurant.getTopScore())
+                .reviews(restaurant.getReviews())
+                .nameZone(restaurant.getZone().getName())
+                .kitchen(restaurant.getKitchen())
+//                .image(getImageResponsesList(restaurant.getId()))
+                .build();
     }
 
     private List<Restaurant> getRestaurantListByName(String name){

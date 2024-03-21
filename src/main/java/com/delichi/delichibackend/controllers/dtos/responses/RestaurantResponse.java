@@ -13,7 +13,8 @@ public class RestaurantResponse {
     private Long id;
     private String name;
     private String nameZone;
-    private Integer topScore;
-
-    private List<GetImageResponse> image;
+    private Float topScore;
+    private Integer reviews;
+    private String kitchen;
+//    private List<GetImageResponse> image;
 }

@@ -143,7 +143,8 @@ public class CeoServiceImpl implements ICeoService {
                 .id(restaurant.getId())
                 .name(restaurant.getName())
                 .nameZone(restaurant.getZone().getName())
-                .image(getImageResponseList(restaurant)).build();
+//                .image(getImageResponseList(restaurant))
+                .build();
     }
 
     private Ceo from(CreateCeoRequest request){

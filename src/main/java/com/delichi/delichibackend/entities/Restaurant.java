@@ -49,6 +49,12 @@ public class Restaurant {
     @Column(nullable = false)
     private Integer tableCapacity;
 
+    @Column(nullable = false)
+    private Float topScore;
+
+    @Column(nullable = false)
+    private Integer reviews;
+
     @ManyToOne
     private Ceo ceo;
 

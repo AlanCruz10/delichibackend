@@ -16,14 +16,14 @@ public class RestaurantController {
     @Autowired
     private IRestaurantService service;
 
-    @GetMapping("{id}")
+    @GetMapping("api/v1/{id}")
     public ResponseEntity<BaseResponse> get(@Valid @PathVariable Long id){
         BaseResponse baseResponse = service.get(id);
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
     }
 
 
-    @GetMapping("restaurants")
+    @GetMapping("api/v1/restaurants")
     public ResponseEntity<BaseResponse> list(){
         BaseResponse baseResponse = service.list();
         return new ResponseEntity<>(baseResponse, baseResponse.getHttpStatus());
