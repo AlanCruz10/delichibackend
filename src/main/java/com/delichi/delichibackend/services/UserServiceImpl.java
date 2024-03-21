@@ -180,32 +180,38 @@ public class UserServiceImpl implements IUserService {
 
     private User validationUpdateDateUser(UpdateUserRequest request, Long id){
         User user = findAndEnsureExists(id);
-        UpdateUserRequest requestValidate = validateEmailAndPhoneNumberExists(request);
-        if(request.getName().length() == 0 || request.getName() == null || Objects.equals(request.getName(), "")) {
-            user.setName(user.getName());
-        }else {
-            user.setName(requestValidate.getName());
-        }
-        if(request.getPhoneNumber() == null || request.getPhoneNumber() == 0) {
-            user.setPhoneNumber(user.getPhoneNumber());
-        }else {
-            user.setPhoneNumber(requestValidate.getPhoneNumber());
-        }
-        if(request.getEmail().length() == 0 || request.getEmail() == null || Objects.equals(request.getEmail(), "")) {
-            user.setEmail(user.getEmail());
-        }else {
-            user.setEmail(requestValidate.getEmail());
-        }
-        if(request.getPassword().length() == 0 || request.getPassword() == null || Objects.equals(request.getPassword(), "")) {
-            user.setPassword(user.getPassword());
-        }else {
-            user.setPassword(new BCryptPasswordEncoder().encode(requestValidate.getPassword()));
-        }
-        if(request.getLastName().length() == 0 || request.getLastName() == null || Objects.equals(request.getLastName(), "")) {
-            user.setLastName(user.getLastName());
-        }else {
-            user.setLastName(requestValidate.getLastName());
-        }
+        user.setName(request.getName());
+        user.setPassword(new BCryptPasswordEncoder().encode(request.getPassword()));
+        user.setEmail(request.getEmail());
+        user.setPhoneNumber(request.getPhoneNumber());
+        user.setLastName(request.getLastName());
+        user.setId(user.getId());
+//        UpdateUserRequest requestValidate = validateEmailAndPhoneNumberExists(request);
+//        if(request.getName().length() == 0 || request.getName() == null || Objects.equals(request.getName(), "")) {
+//            user.setName(user.getName());
+//        }else {
+//            user.setName(requestValidate.getName());
+//        }
+//        if(request.getPhoneNumber() == null || request.getPhoneNumber() == 0) {
+//            user.setPhoneNumber(user.getPhoneNumber());
+//        }else {
+//            user.setPhoneNumber(requestValidate.getPhoneNumber());
+//        }
+//        if(request.getEmail().length() == 0 || request.getEmail() == null || Objects.equals(request.getEmail(), "")) {
+//            user.setEmail(user.getEmail());
+//        }else {
+//            user.setEmail(requestValidate.getEmail());
+//        }
+//        if(request.getPassword().length() == 0 || request.getPassword() == null || Objects.equals(request.getPassword(), "")) {
+//            user.setPassword(user.getPassword());
+//        }else {
+//            user.setPassword(new BCryptPasswordEncoder().encode(requestValidate.getPassword()));
+//        }
+//        if(request.getLastName().length() == 0 || request.getLastName() == null || Objects.equals(request.getLastName(), "")) {
+//            user.setLastName(user.getLastName());
+//        }else {
+//            user.setLastName(requestValidate.getLastName());
+//        }
         return user;
     }
 

@@ -10,7 +10,6 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 @Setter
-@Builder
 public class UpdateUserRequest {
     @Email
     @NotNull
@@ -23,4 +22,8 @@ public class UpdateUserRequest {
     private Long phoneNumber;
     @NotNull
     private String password;
+
+    public UpdateUserRequest() {
+    }
+
 }
